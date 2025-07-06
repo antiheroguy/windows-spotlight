@@ -140,41 +140,23 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
 
-// Types
-interface SpotlightData {
-  title: string
-  description: string
-  copyright: string
-  landscapeImage: {
-    asset: string
-  }
-  portraitImage: {
-    asset: string
-  }
-}
-
-interface SpotlightResponse {
-  ad: SpotlightData
-}
-
 // Reactive state
-const imageData = ref<SpotlightData | null>(null)
+const imageData = ref(null)
 const loading = ref(true)
 const autoplayEnabled = ref(false)
-const autoplayTimer = ref<number | null>(null)
-const progressTimer = ref<number | null>(null)
+const autoplayTimer = ref(null)
+const progressTimer = ref(null)
 const progressWidth = ref(0)
 const isFullscreen = ref(false)
 const isMobile = ref(false)
 const controlsHidden = ref(false)
-const hideControlsTimer = ref<number | null>(null)
+const hideControlsTimer = ref(null)
 
 // Constants
-const API_URL =
-  '/api/v4/api/selection?placement=88000820&fmt=json&locale=en-US&country=vi'
+const API_URL = '/api/spotlight'
 const AUTOPLAY_INTERVAL = 10000 // 10 seconds
 const PROGRESS_UPDATE_INTERVAL = 100 // Update progress every 100ms
 const CONTROLS_HIDE_DELAY = 3000 // 3 seconds
@@ -203,7 +185,7 @@ const fetchSpotlightData = async () => {
   try {
     loading.value = true
     const response = await fetch(API_URL)
-    const data: SpotlightResponse = await response.json()
+    const data = await response.json()
     imageData.value = data.ad
   } catch (error) {
     console.error('Error fetching spotlight data:', error)
@@ -244,7 +226,7 @@ const startAutoplay = () => {
 
     if (progress >= 100) {
       progressWidth.value = 100
-      clearInterval(progressTimer.value!)
+      clearInterval(progressTimer.value)
       progressTimer.value = null
     } else {
       progressWidth.value = progress
