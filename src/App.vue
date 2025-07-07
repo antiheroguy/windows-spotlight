@@ -75,26 +75,6 @@
 
         <!-- Bottom Controls -->
         <div class="bottom-controls">
-          <!-- Refresh Button -->
-          <button
-            @click="fetchNewImage"
-            class="control-button refresh-button"
-            :disabled="loading"
-            title="Get New Image"
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path d="M23 4v6h-6" />
-              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
-            </svg>
-          </button>
-
           <!-- Autoplay Button -->
           <button
             @click="toggleAutoplay"
@@ -123,6 +103,26 @@
             >
               <rect x="6" y="4" width="4" height="16" />
               <rect x="14" y="4" width="4" height="16" />
+            </svg>
+          </button>
+
+          <!-- Refresh Button -->
+          <button
+            @click="fetchNewImage"
+            class="control-button refresh-button"
+            :disabled="loading"
+            title="Get New Image"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M23 4v6h-6" />
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
             </svg>
           </button>
         </div>
@@ -279,7 +279,7 @@ const handleFullscreenChange = () => {
     controlsHidden.value = false
     clearHideControlsTimer()
   } else {
-    startHideControlsTimer()
+    startHideControlsTimer(0)
   }
 }
 
@@ -297,13 +297,13 @@ const onMouseLeave = () => {
   }
 }
 
-const startHideControlsTimer = () => {
+const startHideControlsTimer = (delay = CONTROLS_HIDE_DELAY) => {
   clearHideControlsTimer()
   hideControlsTimer.value = setTimeout(() => {
     if (isFullscreen.value) {
       controlsHidden.value = true
     }
-  }, CONTROLS_HIDE_DELAY)
+  }, delay)
 }
 
 const clearHideControlsTimer = () => {
